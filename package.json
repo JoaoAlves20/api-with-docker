@@ -1,0 +1,22 @@
+{
+  "name": "api-with-docker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/JoaoAlves20/api-with-docker.git",
+  "author": "JoaoAlves20 <jvsimoesalves@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "npx nodemon --env-file=.env src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "pg": "^8.13.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
