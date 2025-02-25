@@ -2,10 +2,10 @@ import { Sequelize } from 'sequelize'
 
 import config from '../config/serverConfig.js'
 
-const { name, user, password, host } = config
+const { name, user, password, host } = config.db
 
 export const sequelize = new Sequelize(name, user, password, {
-    host: host,
+    host,
     dialect: 'postgres',
     logging: false
 })
