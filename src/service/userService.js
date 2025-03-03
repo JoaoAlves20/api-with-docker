@@ -11,7 +11,7 @@ class UserServive {
 
     findById(id) {
         return new Promise((resolve) => {
-            const user = User.findOne({ where: { id } })
+            const user = User.findOne({ where: { Id: id } })
 
             return resolve(user)
         })
@@ -22,6 +22,14 @@ class UserServive {
             const newUser = User.create({ first_name, last_name })
 
             return resolve(newUser)
+        })
+    }
+
+    update(id, first_name, last_name) {
+        return new Promise((resolve) => {
+            const updated = User.update({ first_name, last_name }, { where: { Id: id } })
+
+            return resolve(updated)
         })
     }
 }
