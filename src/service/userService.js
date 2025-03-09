@@ -32,6 +32,13 @@ class UserServive {
             return resolve(updated)
         })
     }
+
+    delete(id) {
+        return new Promise((resolve) => {
+            const deletedUser = User.destroy({ where: { Id: id } })
+            return resolve(deletedUser)
+        })
+    }
 }
 
 export default new UserServive()

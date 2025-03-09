@@ -61,8 +61,24 @@ class UserController {
                 response.status(400).json({ error: "First and Last Name is required" })
             }
 
-            const updatedUser = await UserService.update(id, first_name, last_name)
-            response.status(200).json(updatedUser)
+            await UserService.update(id, first_name, last_name)
+            response.status(200).json(verifyId)
+        } catch (err) {
+            response.status(500).json({ error: err.message })
+        }
+    }
+
+    async deletedUser(request, response) {
+        try {
+            const { id } = request.params
+            const verifyId = await UserService.findById(id)
+
+            if (!verifyId) {
+                response.status(404).json({ error: "User not found" })
+            }
+
+            await UserService.delete(id)
+            response.status(200).json({ sucessful: "User deleted" })
         } catch (err) {
             response.status(500).json({ error: err.message })
         }

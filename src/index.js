@@ -10,7 +10,7 @@ const server = express()
 server.use(express.json())
 server.use(helmet())
 
-server.use(router)
+server.use('/users', router)
 
 sequelize.sync()
     .then(() => console.log('Tabelas sincronizadas'))
