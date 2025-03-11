@@ -35,7 +35,7 @@ export class PostgresAdmin extends Funcionality {
 
     async defineModel() {
         this._users = this._driver.define('User', {
-            Id: {
+            id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
@@ -55,5 +55,37 @@ export class PostgresAdmin extends Funcionality {
         })
 
         await this._users.sync()
+    }
+
+    findAll() {
+        return new Promise((resolve) => {
+            const users = this._users.findAll({ limit: 4 })
+            
+            return resolve(users)
+        })
+    }
+
+    findById(id) {
+        return new Promise((resolve) => {
+            const user = this._users.findOne({ where: { id } })
+
+            return resolve(user)
+        })
+    }
+
+    create({ first_name, last_name }) {
+        return new Promise((resolve) => {
+            const userCreated = this._users.create({ first_name, last_name })
+
+            return resolve(userCreated)
+        })
+    }
+
+    update(id, { first_name, last_name }) {
+        return new Promise((resolve) => {
+            const updatedUser = this._users.update({ first_name, last_name }, { where: { id } })
+
+            return resolve(updatedUser)
+        })
     }
 }
