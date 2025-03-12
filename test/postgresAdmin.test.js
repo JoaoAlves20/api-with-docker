@@ -44,7 +44,7 @@ describe('Postgres Test', function () {
     })
 
     it('Testing FindAll', async () => {
-        const result = await context.findAll()
+        const result = await context.findAll(4)
 
         const newUsers = result.map(user => user.dataValues)
         
@@ -63,5 +63,23 @@ describe('Postgres Test', function () {
         delete dataValues.id
 
         assert.deepEqual(dataValues, userTest)
+    })
+
+    it('Testing Update', async () => {
+        await context.update(1, {
+            first_name: userTest.first_name,
+            last_name: userTest.last_name
+        })
+
+        const { dataValues } = await context.findById(1)
+        delete dataValues.id
+        assert.deepEqual(dataValues, userTest)
+    })
+
+    it('Testing delete', async () => {
+        await context.delete(6)
+
+        const user = await context.findById(6)
+        assert.deepEqual(user, null)
     })
 })

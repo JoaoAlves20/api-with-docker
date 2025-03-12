@@ -57,9 +57,9 @@ export class PostgresAdmin extends Funcionality {
         await this._users.sync()
     }
 
-    findAll() {
+    findAll(limit = 200) {
         return new Promise((resolve) => {
-            const users = this._users.findAll({ limit: 4 })
+            const users = this._users.findAll({ limit })
             
             return resolve(users)
         })
@@ -86,6 +86,14 @@ export class PostgresAdmin extends Funcionality {
             const updatedUser = this._users.update({ first_name, last_name }, { where: { id } })
 
             return resolve(updatedUser)
+        })
+    }
+
+    delete(id) {
+        return new Promise((resolve) => {
+            const deletedUser = this._users.destroy({ where: { id } })
+
+            return resolve(deletedUser)
         })
     }
 }

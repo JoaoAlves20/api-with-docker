@@ -1,15 +1,24 @@
-import UserService from '../service/userService.js'
+import { ContextStrategy } from '../strategy/base/contextStrategy.js'
+import { PostgresAdmin } from '../strategy/postgresAdmin.js'
+
+const context = new ContextStrategy(new PostgresAdmin())
 
 class UserController {
+    constructor() {
+        context.connect()
+    }
+
     async getAllUsers(_, response) {
         try {
-            const users = await UserService.findAll()
+            const users = await context.findAll()
 
-            if (!users) {
+            const dataValues = users.map(user => user.dataValues)
+
+            if (!dataValues) {
                 response.status(404).json({ error: 'Users not found' })
             }
 
-            response.status(200).json(users)
+            response.status(200).json(dataValues)
         } catch (err) {
             response.status(500).json({ error: err.message })
         }
@@ -18,13 +27,13 @@ class UserController {
     async getUserById(request, response) {
         try {
             const { id } = request.params
-            const verifyUser = await UserService.findById(id)
+            const { dataValues } = await context.findById(id)
 
-            if (!verifyUser) {
+            if (!dataValues) {
                 response.status(404).json({ error: 'User not found' })
             }
 
-            response.status(200).json(verifyUser)
+            response.status(200).json(dataValues)
         } catch (err) {
             response.status(500).json({ error: err.message })
         }
@@ -38,9 +47,9 @@ class UserController {
                 response.status(400).json({ error: 'First and Last Name is required' })
             }
             
-            const newUser = await UserService.create(first_name, last_name)
+            const { dataValues } = await context.create({ first_name, last_name })
 
-            response.status(201).json(newUser)
+            response.status(201).json(dataValues)
         } catch (err) {
             response.status(500).json({ error: err.message })
         }
@@ -49,9 +58,9 @@ class UserController {
     async updateUser(request, response) {
         try {
             const { id } = request.params
-            const verifyId = await UserService.findById(id)
+            const { dataValues } = await context.findById(id)
 
-            if (!verifyId) {
+            if (!dataValues) {
                 response.status(404).json({ error: "User not found" })
             }
             
@@ -61,8 +70,8 @@ class UserController {
                 response.status(400).json({ error: "First and Last Name is required" })
             }
 
-            await UserService.update(id, first_name, last_name)
-            response.status(200).json(verifyId)
+            await context.update(id, { first_name, last_name })
+            response.status(200).json({ message: "User updated" })
         } catch (err) {
             response.status(500).json({ error: err.message })
         }
@@ -71,13 +80,13 @@ class UserController {
     async deletedUser(request, response) {
         try {
             const { id } = request.params
-            const verifyId = await UserService.findById(id)
+            const { dataValues } = await context.findById(id)
 
-            if (!verifyId) {
+            if (!dataValues) {
                 response.status(404).json({ error: "User not found" })
             }
 
-            await UserService.delete(id)
+            await context.delete(id)
             response.status(200).json({ sucessful: "User deleted" })
         } catch (err) {
             response.status(500).json({ error: err.message })
